@@ -37,7 +37,7 @@ export default function MediaPermissionTester() {
       setCameraError(null);
 
       // Request camera permission
-      const constraints = { video: { facingMode: 'user' } };
+      const constraints = { video: { facingMode: 'environment' } };
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       addLog('Camera: Permission granted, stream obtained', 'success');
 
@@ -207,7 +207,7 @@ export default function MediaPermissionTester() {
       }
       if (trackRef.current) {
         trackRef.current.stop();
-        trackRef.current = null;
+        trackRef.current = null
       }
       if (micStreamRef.current) {
         micStreamRef.current.getAudioTracks().forEach(track => track.stop());
