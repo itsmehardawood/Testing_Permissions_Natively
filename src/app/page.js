@@ -119,6 +119,8 @@ export default function MediaPermissionTester() {
       }
 
       const newTorchState = !torchEnabled;
+      addLog(`Camera: Attempting to toggle torch to ${newTorchState}...`, 'info');
+      
       await trackRef.current.applyConstraints({
         advanced: [{ torch: newTorchState }],
       });
@@ -128,6 +130,19 @@ export default function MediaPermissionTester() {
     } catch (error) {
       const errorMsg = `Camera: Torch toggle error - ${error.message || error.name}`;
       addLog(errorMsg, 'error');
+      addLog('Camera: Trying alternative torch method...', 'info');
+      
+      // Try alternative method with just torch constraint
+      try {
+        const newTorchState = !torchEnabled;
+        await trackRef.current.applyConstraints({
+          torch: newTorchState,
+        });
+        setTorchEnabled(newTorchState);
+        addLog(`Camera: Torch ${newTorchState ? 'enabled' : 'disabled'} (alternative method)`, 'success');
+      } catch (altError) {
+        addLog(`Camera: Alternative torch method failed - ${altError.message || altError.name}`, 'error');
+      }
     }
   };
 
